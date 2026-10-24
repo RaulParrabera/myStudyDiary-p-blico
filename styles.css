@@ -1,0 +1,390 @@
+/* ====== Diario de Estudio: estilos ====== */
+/* Concepto: hoja de cuaderno español — cuadrícula suave, margen rojo
+   vertical y tinta azul-negra. La tipografía (Newsreader + Instrument
+   Sans) lleva todo el peso; el único momento con color es la cifra
+   de la racha. */
+
+:root {
+  --papel: #f5f6f3;
+  --tinta: #1f2233;
+  --tinta-suave: #63677a;
+  --linea: #e3e4dd;
+  --puntos: #c9cac2;
+  --margen: #b23a2e;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 16px;
+  font-family: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--tinta);
+  background-color: var(--papel);
+  /* Cuadrícula de cuaderno, muy tenue. */
+  background-image:
+    repeating-linear-gradient(to right, transparent 0 23px, rgba(31, 34, 51, 0.05) 23px 24px),
+    repeating-linear-gradient(to bottom, transparent 0 23px, rgba(31, 34, 51, 0.05) 23px 24px);
+}
+
+/* El margen rojo del cuaderno: línea fija junto a la columna. */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: max(18px, calc(50% - 256px));
+  width: 1.5px;
+  background: var(--margen);
+  opacity: 0.5;
+}
+
+/* ----- Cabecera: cabecera de bitácora ----- */
+.cabecera {
+  max-width: 560px;
+  margin: 0 auto 32px;
+  padding: 8px 8px 14px clamp(36px, 8vw, 52px);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  border-bottom: 1.5px solid var(--tinta);
+}
+
+.cabecera h1 {
+  margin: 0;
+  font-family: "Newsreader", Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.75rem;
+  line-height: 1.1;
+}
+
+.fecha-hoy {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: var(--tinta-suave);
+}
+
+.estadisticas {
+  display: flex;
+  align-items: flex-end;
+  gap: 26px;
+}
+
+/* La cifra de la racha: el momento de la página. */
+.racha-numero {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(3.25rem, 11vw, 4.5rem);
+  line-height: 0.85;
+  color: var(--margen);
+  font-variant-numeric: tabular-nums;
+}
+
+.mes {
+  padding-left: 24px;
+  border-left: 1px solid var(--linea);
+}
+
+.mes-numero {
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 500;
+  font-size: clamp(1.75rem, 6vw, 2.25rem);
+  line-height: 0.9;
+  font-variant-numeric: tabular-nums;
+}
+
+.racha-etiqueta,
+.mes-etiqueta {
+  margin-top: 6px;
+  font-size: 0.8rem;
+  color: var(--tinta-suave);
+  white-space: nowrap;
+}
+
+/* ----- Contenido: una sola columna, como la página del cuaderno ----- */
+.contenido {
+  max-width: 560px;
+  margin: 0 auto;
+  padding-left: clamp(36px, 8vw, 52px);
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.tarjeta {
+  padding: 0;
+}
+
+.tarjeta h2 {
+  margin: 0 0 16px;
+  padding-bottom: 8px;
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 600;
+  font-size: 1.3rem;
+  border-bottom: 1px solid var(--linea);
+}
+
+/* ----- Formulario: campos como renglones escritos ----- */
+label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--tinta-suave);
+}
+
+input {
+  width: 100%;
+  padding: 9px 2px;
+  margin-bottom: 18px;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--tinta);
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px solid var(--puntos);
+  border-radius: 0;
+}
+
+input:focus {
+  outline: none;
+  border-bottom-color: var(--tinta);
+  box-shadow: 0 1px 0 var(--tinta);
+}
+
+input:focus-visible {
+  outline: 2px solid var(--margen);
+  outline-offset: 3px;
+  box-shadow: none;
+}
+
+button {
+  width: 100%;
+  padding: 13px;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--papel);
+  background: var(--tinta);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+button:hover {
+  background: #33374d;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--margen);
+  outline-offset: 2px;
+}
+
+/* ----- Mapa de constancia ----- */
+.mapa-fila {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+/* Etiquetas de día, alineadas con las filas de la rejilla. */
+.mapa-dias {
+  display: grid;
+  /* Ancho fijo para que el ancho del contenedor del mapa no dependa de las
+     fuentes (si cambiara al cargar la fuente, el mapa arrancaría a destiempo). */
+  width: 14px;
+  grid-template-rows: 14px repeat(7, 12px);
+  gap: 3px;
+  padding-top: 34px; /* misma reserva que la rejilla, para cuadrar filas */
+  font-size: 0.65rem;
+  line-height: 1;
+  color: var(--tinta-suave);
+}
+
+.mapa-dias span {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.mapa-scroll {
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+/* Una columna por semana: fila de mes y siete días. */
+.mapa-rejilla {
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: 14px repeat(7, 12px);
+  gap: 3px;
+  justify-content: start;
+  /* Sitio para el texto emergente, que si no queda recortado por el scroll. */
+  padding: 34px 44px 6px;
+}
+
+.mapa-mes {
+  /* Ancho fijo: la etiqueta se dibuja encima de las semanas vecinas sin
+     ensanchar su columna (si no, el mapa queda con columnas desiguales). */
+  width: 12px;
+  justify-self: start;
+  font-size: 0.65rem;
+  line-height: 14px;
+  white-space: nowrap;
+  color: var(--tinta-suave);
+}
+
+.mapa-celda {
+  display: block;
+  position: relative;
+  width: 12px;
+  height: 12px;
+  padding: 0;
+  border: none;
+  border-radius: 2px;
+  background: var(--linea);
+  cursor: default;
+}
+
+/* Rampa de intensidad: tintes del óxido, del papel al margen rojo. */
+.nivel-0 { background: var(--linea); }
+.nivel-1 { background: #edcdc7; }
+.nivel-2 { background: #dda49a; }
+.nivel-3 { background: #c9705f; }
+.nivel-4 { background: var(--margen); }
+
+.fuera-calendario {
+  background: transparent;
+}
+
+.mapa-celda:focus-visible {
+  outline: 2px solid var(--margen);
+  outline-offset: 2px;
+}
+
+.mapa-tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 8px;
+  font-size: 0.72rem;
+  line-height: 1.3;
+  white-space: nowrap;
+  text-align: center;
+  color: var(--papel);
+  background: var(--tinta);
+  border-radius: 4px;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.12s ease;
+  z-index: 3;
+}
+
+.mapa-tooltip span {
+  display: block;
+}
+
+.mapa-celda:hover .mapa-tooltip,
+.mapa-celda:focus-visible .mapa-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mapa-leyenda {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 14px;
+  font-size: 0.72rem;
+  color: var(--tinta-suave);
+}
+
+/* ----- Lista de sesiones: índice de libro ----- */
+.lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sesion {
+  display: flex;
+  align-items: baseline; /* Tema, líder punteado y minutos comparten línea base. */
+  gap: 0;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--linea);
+}
+
+.sesion-tema {
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.sesion-fecha {
+  margin-top: 1px;
+  font-family: "Newsreader", Georgia, serif;
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--tinta-suave);
+}
+
+/* Líder punteado entre el tema y los minutos. */
+.sesion-conector {
+  flex: 1;
+  margin: 0 10px 3px;
+  border-bottom: 1px dotted var(--puntos);
+}
+
+.sesion-minutos {
+  flex-shrink: 0;
+  font-family: "Newsreader", Georgia, serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.vacio {
+  margin: 0;
+  font-family: "Newsreader", Georgia, serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--tinta-suave);
+  text-align: center;
+  padding: 12px 0;
+}
+
+/* Ocultamos la lista o el mensaje de vacío según haga falta */
+.oculto {
+  display: none;
+}
+
+/* ----- Móvil ----- */
+@media (max-width: 480px) {
+  .cabecera {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .estadisticas {
+    gap: 20px;
+  }
+}
+
+/* Respetamos a quien prefiera menos movimiento. */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

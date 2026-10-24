@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diario de Estudio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="cabecera">
+    <div class="cabecera-texto">
+      <h1>Diario de Estudio</h1>
+      <p class="fecha-hoy" id="fecha-hoy"></p>
+    </div>
+    <div class="estadisticas">
+      <div class="racha">
+        <div class="racha-numero" id="racha-numero">0</div>
+        <div class="racha-etiqueta" id="racha-etiqueta">días seguidos 🔥</div>
+      </div>
+      <div class="mes">
+        <div class="mes-numero" id="dias-mes-numero">0</div>
+        <div class="mes-etiqueta">este mes</div>
+      </div>
+    </div>
+  </header>
+
+  <main class="contenido">
+
+    <!-- Mapa de constancia: últimos 12 meses -->
+    <section class="tarjeta mapa" aria-labelledby="mapa-titulo">
+      <h2 id="mapa-titulo">Constancia</h2>
+
+      <div class="mapa-fila">
+        <div class="mapa-dias" aria-hidden="true">
+          <span></span>
+          <span>L</span>
+          <span></span>
+          <span>X</span>
+          <span></span>
+          <span>V</span>
+          <span></span>
+          <span></span>
+        </div>
+        <div class="mapa-scroll" id="mapa-scroll">
+          <div class="mapa-rejilla" id="mapa-rejilla"></div>
+        </div>
+      </div>
+
+      <div class="mapa-leyenda">
+        <span>menos</span>
+        <span class="mapa-celda nivel-0"></span>
+        <span class="mapa-celda nivel-1"></span>
+        <span class="mapa-celda nivel-2"></span>
+        <span class="mapa-celda nivel-3"></span>
+        <span class="mapa-celda nivel-4"></span>
+        <span>más</span>
+      </div>
+    </section>
+
+    <!-- Formulario para registrar una sesión -->
+    <form id="formulario" class="tarjeta">
+      <h2>Nueva sesión</h2>
+
+      <label for="fecha">Fecha</label>
+      <input type="date" id="fecha" required>
+
+      <label for="tema">Tema</label>
+      <input type="text" id="tema" placeholder="Ej: Matemáticas" required>
+
+      <label for="minutos">Minutos</label>
+      <input type="number" id="minutos" min="1" step="1" placeholder="Ej: 45" required>
+
+      <button type="submit">Guardar sesión</button>
+    </form>
+
+    <!-- Lista de sesiones, de la más reciente a la más antigua -->
+    <section class="tarjeta">
+      <h2>Sesiones</h2>
+      <ul id="lista-sesiones" class="lista"></ul>
+      <p id="mensaje-vacio" class="vacio">Todavía no hay sesiones. ¡Empieza hoy!</p>
+    </section>
+
+  </main>
+
+  <script src="logic.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
