@@ -26,6 +26,18 @@
         <div class="mes-etiqueta">este mes</div>
       </div>
     </div>
+
+    <div class="objetivo-semanal">
+      <div class="objetivo-info">
+        <div class="objetivo-titulo">Objetivo semanal</div>
+        <div class="objetivo-progreso" id="objetivo-progreso">— / — min</div>
+        <div class="objetivo-estado" id="objetivo-estado"></div>
+      </div>
+      <form id="form-objetivo" class="form-objetivo" novalidate>
+        <input id="objetivo-input" type="number" min="1" step="1" inputmode="numeric" placeholder="Minutos (ej. 300)">
+        <button type="submit">Fijar objetivo</button>
+      </form>
+    </div>
   </header>
 
   <main class="contenido">

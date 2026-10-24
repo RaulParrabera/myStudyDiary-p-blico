@@ -27,6 +27,29 @@ function guardarSesiones(sesiones) {
   localStorage.setItem(CLAVE, JSON.stringify(sesiones));
 }
 
+var CLAVE_OBJETIVO = "diarioDeEstudio.objetivoSemanal";
+
+function cargarObjetivo() {
+  var texto = localStorage.getItem(CLAVE_OBJETIVO);
+  if (!texto) {
+    return null;
+  }
+  try {
+    var datos = JSON.parse(texto);
+    var g = Number(datos && datos.minutos);
+    if (Number.isInteger(g) && isFinite(g) && g > 0) {
+      return g;
+    }
+    return null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function guardarObjetivo(minutos) {
+  localStorage.setItem(CLAVE_OBJETIVO, JSON.stringify({ minutos: minutos }));
+}
+
 
 // ============================================================
 // Referencias a los elementos del HTML
@@ -45,7 +68,13 @@ var fechaHoy = document.getElementById("fecha-hoy");
 var mapaScroll = document.getElementById("mapa-scroll");
 var mapaRejilla = document.getElementById("mapa-rejilla");
 
+var formObjetivo = document.getElementById("form-objetivo");
+var objetivoInput = document.getElementById("objetivo-input");
+var objetivoProgreso = document.getElementById("objetivo-progreso");
+var objetivoEstado = document.getElementById("objetivo-estado");
+
 var sesiones = cargarSesiones();
+var objetivoSemanal = cargarObjetivo();
 
 
 // ============================================================
@@ -191,6 +220,26 @@ function pintarLista() {
   }
 }
 
+function pintarObjetivo(today) {
+  var p = StudyLogic.weeklyProgress(sesiones, today, objetivoSemanal);
+
+  if (p.goal === null) {
+    objetivoProgreso.textContent = "— / — min";
+    objetivoEstado.textContent = "";
+    objetivoEstado.classList.remove("cumplido");
+    return;
+  }
+
+  objetivoProgreso.textContent = p.current + " / " + p.goal + " min";
+  if (p.done) {
+    objetivoEstado.textContent = "¡Objetivo cumplido!";
+    objetivoEstado.classList.add("cumplido");
+  } else {
+    objetivoEstado.textContent = p.percent + "% de la semana";
+    objetivoEstado.classList.remove("cumplido");
+  }
+}
+
 // Vuelve a pintar todo. Se lee el reloj una sola vez por render.
 function pintarTodo() {
   var today = StudyLogic.toISO(new Date());
@@ -199,6 +248,7 @@ function pintarTodo() {
   pintarDiasMes(today);
   pintarMapa(today);
   pintarLista();
+  pintarObjetivo(today);
 }
 
 
@@ -234,6 +284,24 @@ formulario.addEventListener("submit", function (evento) {
   campoMinutos.value = "";
   campoTema.focus();
 });
+
+if (formObjetivo) {
+  formObjetivo.addEventListener("submit", function (evento) {
+    evento.preventDefault();
+
+    var valor = objetivoInput.value;
+    var g = Number(valor);
+
+    if (!Number.isInteger(g) || !isFinite(g) || g <= 0) {
+      return;
+    }
+
+    objetivoSemanal = g;
+    guardarObjetivo(g);
+    pintarTodo();
+    objetivoInput.value = "";
+  });
+}
 
 
 // ============================================================

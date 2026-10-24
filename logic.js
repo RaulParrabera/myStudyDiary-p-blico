@@ -246,6 +246,80 @@ function daysThisMonth(sessions, today) {
 
 
 // ============================================================
+// Objetivo semanal (lunes - domingo)
+// ============================================================
+
+// Lunes de la semana que contiene esa fecha.
+function startOfWeekMonday(iso) {
+  var date = dateFromISO(iso);
+  var weekday = (date.getDay() + 6) % 7; // 0 = lunes ... 6 = domingo
+  date.setDate(date.getDate() - weekday);
+  return toISO(date);
+}
+
+// Domingo de la semana que contiene esa fecha.
+function endOfWeekSunday(iso) {
+  return addDays(startOfWeekMonday(iso), 6);
+}
+
+// Límites lunes-domingo de la semana que contiene esa fecha.
+function weekBounds(iso) {
+  var start = startOfWeekMonday(iso);
+  return {
+    start: start,
+    end: addDays(start, 6)
+  };
+}
+
+// Minutos totales de sesiones válidas dentro de la semana lunes-domingo de `today`.
+function minutesInWeek(sessions, today) {
+  var bounds = weekBounds(today);
+  var totals = dailyMinutes(sessions);
+  var sum = 0;
+  var cursor = bounds.start;
+  while (cursor <= bounds.end) {
+    sum = sum + (totals[cursor] || 0);
+    cursor = addDays(cursor, 1);
+  }
+  return sum;
+}
+
+// Progreso semanal. goalMinutes debe ser entero > 0 para considerarlo objetivo.
+function weeklyProgress(sessions, today, goalMinutes) {
+  var current = minutesInWeek(sessions, today);
+  var goal = null;
+  var g = Number(goalMinutes);
+
+  if (Number.isInteger(g) && isFinite(g) && g > 0) {
+    goal = g;
+  }
+
+  var percent = 0;
+  if (goal !== null && goal > 0) {
+    percent = Math.floor((current * 100) / goal);
+    if (percent > 100) {
+      percent = 100;
+    }
+    if (percent < 0) {
+      percent = 0;
+    }
+  }
+
+  var bounds = weekBounds(today);
+  var done = goal !== null && current >= goal;
+
+  return {
+    current: current,
+    goal: goal,
+    percent: percent,
+    done: done,
+    weekStart: bounds.start,
+    weekEnd: bounds.end
+  };
+}
+
+
+// ============================================================
 // Exportación doble: navegador y Node
 // ============================================================
 
@@ -259,6 +333,9 @@ var StudyLogic = {
   addDays: addDays,
   startOfWeek: startOfWeek,
   endOfWeek: endOfWeek,
+  startOfWeekMonday: startOfWeekMonday,
+  endOfWeekSunday: endOfWeekSunday,
+  weekBounds: weekBounds,
   subtractMonths: subtractMonths,
   formatDate: formatDate,
   dailyMinutes: dailyMinutes,
@@ -266,7 +343,9 @@ var StudyLogic = {
   monthLabels: monthLabels,
   buildHeatmap: buildHeatmap,
   calculateStreak: calculateStreak,
-  daysThisMonth: daysThisMonth
+  daysThisMonth: daysThisMonth,
+  minutesInWeek: minutesInWeek,
+  weeklyProgress: weeklyProgress
 };
 
 if (typeof module !== "undefined" && module.exports) {

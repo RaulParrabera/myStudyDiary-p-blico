@@ -107,6 +107,64 @@ body::before {
   white-space: nowrap;
 }
 
+/* ----- Objetivo semanal ----- */
+.objetivo-semanal {
+  width: 100%;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--linea);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.objetivo-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.objetivo-titulo {
+  font-size: 0.8rem;
+  color: var(--tinta-suave);
+}
+
+.objetivo-progreso {
+  font-family: "Newsreader", Georgia, serif;
+  font-size: 1.25rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.objetivo-estado {
+  font-size: 0.8rem;
+  color: var(--tinta-suave);
+}
+
+.objetivo-estado.cumplido {
+  color: var(--margen);
+  font-weight: 600;
+}
+
+.form-objetivo {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.form-objetivo input {
+  width: 140px;
+  margin-bottom: 0;
+  padding: 8px 6px;
+}
+
+.form-objetivo button {
+  width: auto;
+  padding: 9px 12px;
+  font-size: 0.9rem;
+}
+
 /* ----- Contenido: una sola columna, como la página del cuaderno ----- */
 .contenido {
   max-width: 560px;
